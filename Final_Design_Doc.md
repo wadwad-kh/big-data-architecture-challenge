@@ -2,46 +2,7 @@
 
 ## D1. Architecture Diagram
 
-> **Instructions for you:** Go to [mermaid.live](https://mermaid.live), paste the code block below into the "Code" section on the left, and it will instantly generate your architecture diagram! You can then click "Save as PNG" or "Save as SVG" to put it in your final PDF.
-
-```mermaid
-graph TD
-    %% Ingestion Layer
-    subgraph Ingestion [Ingestion Layer]
-        R(2,000 RSS Feeds & 5 Partner APIs)
-        F(Social Media Firehose<br>100k msgs/sec peak)
-    end
-
-    %% Message Bus
-    K[Apache Kafka<br>Message Bus<br>Handles 50k msgs/min & 100k peaks]
-
-    %% Stream Processing
-    SP[Apache Flink<br>Stream Processing<br>Sub-30s Latency]
-
-    %% LLM
-    LLM(LLM API<br>5-min Batch Prompting)
-
-    %% Storage
-    S3[(Amazon S3<br>Cold Storage: 2 PB<br>Parquet Format)]
-    CH[(ClickHouse<br>Hot Storage: 50 TB<br>Columnar Analytics)]
-
-    %% Serving
-    subgraph Serving [Serving Layer]
-        D[Grafana Dashboard<br>Live Events & Summaries]
-        A[500 Concurrent Analysts<br>Ad-hoc SQL]
-    end
-
-    %% Connections
-    R --> K
-    F --> K
-    K --> SP
-    SP -->|Archives Raw Data| S3
-    SP -->|Writes Hot Data & Summaries| CH
-    SP -->|Sends 5-min Batches| LLM
-    LLM -->|Returns Summaries| SP
-    CH --> D
-    CH --> A
-```
+![Architecture Diagram](Ingestion Layer Data-2026-05-13-112358.png)
 
 ---
 
